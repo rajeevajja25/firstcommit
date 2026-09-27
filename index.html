@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Conversation Bridge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrap">
+      <h1>Conversation Bridge</h1>
+      <p class="tagline">Say what you mean. Understand what they meant.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <div class="mode-switch" role="tablist" aria-label="Choose a mode">
+      <button class="mode-tab is-active" id="tab-rewrite" role="tab" aria-selected="true" aria-controls="panel-rewrite">
+        Help me say this
+      </button>
+      <button class="mode-tab" id="tab-decode" role="tab" aria-selected="false" aria-controls="panel-decode">
+        Help me understand this
+      </button>
+    </div>
+
+    <!-- REWRITE MODE -->
+    <section class="panel" id="panel-rewrite" role="tabpanel" aria-labelledby="tab-rewrite">
+      <form id="rewrite-form">
+        <label for="rewrite-message">What do you want to say?</label>
+        <textarea id="rewrite-message" rows="5"
+          placeholder="e.g. I can't come to the meeting today, I have too much going on and I'm tired of these last minute changes"
+          required></textarea>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="rewrite-recipient">Who's it for? <span class="optional">(optional)</span></label>
+            <input type="text" id="rewrite-recipient" placeholder="e.g. my manager, a classmate, a professor" />
+          </div>
+          <div class="field">
+            <label id="tone-label">Tone</label>
+            <div class="chip-group" role="group" aria-labelledby="tone-label">
+              <button type="button" class="chip is-active" data-tone="clearer, but keep it casual">Just clearer</button>
+              <button type="button" class="chip" data-tone="warm">Warm</button>
+              <button type="button" class="chip" data-tone="professional">Professional</button>
+              <button type="button" class="chip" data-tone="direct">Direct</button>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn">Rewrite it</button>
+      </form>
+
+      <div class="result" id="rewrite-result" hidden>
+        <div class="result-card">
+          <div class="result-header">
+            <span>Rewritten</span>
+            <button class="copy-btn" data-copy-target="rewrite-output" type="button">Copy</button>
+          </div>
+          <p id="rewrite-output"></p>
+        </div>
+        <p class="why" id="rewrite-why"></p>
+        <div class="alt" id="rewrite-alt-wrap" hidden>
+          <button class="alt-toggle" id="rewrite-alt-toggle" type="button" aria-expanded="false">Show another option</button>
+          <p class="alt-text" id="rewrite-alt" hidden></p>
+        </div>
+      </div>
+
+      <p class="error" id="rewrite-error" hidden></p>
+      <p class="loading" id="rewrite-loading" hidden>Thinking this through…</p>
+    </section>
+
+    <!-- DECODE MODE -->
+    <section class="panel" id="panel-decode" role="tabpanel" aria-labelledby="tab-decode" hidden>
+      <form id="decode-form">
+        <label for="decode-message">What did they say?</label>
+        <textarea id="decode-message" rows="5"
+          placeholder="e.g. Sure, whenever works for you! No rush at all :)"
+          required></textarea>
+
+        <div class="field">
+          <label for="decode-context">Any context? <span class="optional">(optional)</span></label>
+          <input type="text" id="decode-context" placeholder="e.g. this was after I missed a deadline" />
+        </div>
+
+        <button type="submit" class="submit-btn">Help me understand</button>
+      </form>
+
+      <div class="result" id="decode-result" hidden>
+        <div class="result-card">
+          <div class="result-header"><span>Likely meaning</span></div>
+          <p id="decode-meaning"></p>
+        </div>
+        <p class="subtext" id="decode-subtext" hidden></p>
+        <div class="ambiguous-note" id="decode-ambiguous" hidden>
+          <p>This one's genuinely a bit ambiguous — it might be worth asking.</p>
+          <div class="suggested-question">
+            <span>Try sending:</span>
+            <p id="decode-question"></p>
+          </div>
+        </div>
+      </div>
+
+      <p class="error" id="decode-error" hidden></p>
+      <p class="loading" id="decode-loading" hidden>Thinking this through…</p>
+    </section>
+
+    <p class="disclosure">
+      Conversation Bridge uses Claude (Anthropic) to rewrite and interpret messages.
+      Nothing you type is stored — each message is sent to the model and back, and that's it.
+    </p>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
